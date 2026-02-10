@@ -24,7 +24,7 @@ public class typeAbsenceService implements IDao<TypeAbsence> {
 
     @Override
     public boolean create(TypeAbsence o) {
-        String req = "INSERT INTO `type_absence` (`id`, `nom`, `departement`, `poste`) VALUES (NULL, "
+        String req = "INSERT INTO `type_absence` (`id`, `libelle`, `justification`) VALUES (NULL, "
                     + " '" + o.getLibelle() + "', '" + o.getJustification() + "')";
         int etat = 0;
         try {
@@ -62,7 +62,7 @@ public class typeAbsenceService implements IDao<TypeAbsence> {
             PreparedStatement ps = Connexion.getConnection().prepareStatement(req);
             ps.setString(1, o.getLibelle());
             ps.setString(2, o.getJustification());
-            ps.setInt(4, o.getId());
+            ps.setInt(3, o.getId());
 
             etat = ps.executeUpdate();
 

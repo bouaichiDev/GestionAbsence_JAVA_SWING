@@ -188,7 +188,7 @@ public class Login extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(
                         this,
-                        "Welcome " + authUser.toString(),
+                        authUser.toString(),
                         "Login Success",
                         JOptionPane.INFORMATION_MESSAGE
             );

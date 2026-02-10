@@ -35,7 +35,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Etudiant [id=" + getId() + ", nom=" + getUserName() + "]";
+        return "Bienvenu " + getUserName()  ;
     }
 
     /**

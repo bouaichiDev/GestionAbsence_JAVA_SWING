@@ -24,7 +24,7 @@ public class Employe {
 
     @Override
     public String toString() {
-        return "Etudiant [id=" + getId() + ", nom=" + getNom() + ", departemant=" + departement + ", post=" + post + "]";
+        return getNom() + " - post[" + post + "]";
     }
 
     /**
@@ -74,6 +74,24 @@ public class Employe {
      */
     public void setPost(String post) {
         this.post = post;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        Employe employe = (Employe) obj;
+        return this.id == employe.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
     }
 
 }

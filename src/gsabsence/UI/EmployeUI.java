@@ -5,17 +5,97 @@
  */
 package gsabsence.UI;
 
+import gsabsence.service.EmployeService;
+import java.sql.Connection;
+import gsabsence.entities.Employe;
+import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class EmployeUI extends javax.swing.JInternalFrame {
+
+    private EmployeService employeSrvice;
+    private static Connection connection = null;
+    private DefaultTableModel model = null;
+    private int currentEmplyeId = 0;
 
     /**
      * Creates new form Employe
      */
     public EmployeUI() {
         initComponents();
+        setFrameIcon(
+                    new ImageIcon(getClass().getResource("/images/GsAbsence-icon.png"))
+        );
+        employeSrvice = new EmployeService();
+        model = (DefaultTableModel) jTableEmploye.getModel();
+
+        jTableEmploye.getSelectionModel().addListSelectionListener(e -> {
+            if (!e.getValueIsAdjusting()) {
+                seletedEmpley();
+            }
+        });
+        loadEmployes();
+
+    }
+
+    public void clearForm() {
+        currentEmplyeId = 0;
+        departemantTxt.setText("");
+        posteTxt.setText("");
+        nomTxt.setText("");
+    }
+
+    public void loadEmployes() {
+        model.setRowCount(0);
+        for (Employe e : employeSrvice.findAll()) {
+            model.addRow(new Object[]{
+                e.getId(),
+                e.getNom(),
+                e.getDepartement(),
+                e.getPost()
+            });
+        }
+    }
+
+    public void seletedEmpley() {
+        int selectedRow = jTableEmploye.getSelectedRow();
+
+        // Vérifier qu'une ligne est sélectionnée
+        if (selectedRow == -1) {
+
+            return;
+        }
+
+        // Récupérer l'ID (1ère colonne = index 0)
+        int idEmploye = Integer.parseInt(
+                    jTableEmploye.getValueAt(selectedRow, 0).toString()
+        );
+
+        // Récupérer l'employé depuis la BD
+        EmployeService es = new EmployeService();
+        Employe employe = es.findById(idEmploye);
+
+        if (employe != null) {
+            System.out.println("Employé sélectionné : " + employe.getNom());
+
+            currentEmplyeId = employe.getId();
+            nomTxt.setText(employe.getNom());
+            departemantTxt.setText(employe.getDepartement());
+            posteTxt.setText(employe.getPost());
+        } else {
+            currentEmplyeId = 0;
+            JOptionPane.showMessageDialog(this,
+                        "Employé introuvable",
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE
+            );
+        }
     }
 
     /**
@@ -34,11 +114,11 @@ public class EmployeUI extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         posteTxt = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        viderBtn = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         ajouterBtn = new javax.swing.JButton();
         ajouterBtn1 = new javax.swing.JButton();
         ajouterBtn2 = new javax.swing.JButton();
+        viderBtn = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTableEmploye = new javax.swing.JTable();
@@ -65,29 +145,25 @@ public class EmployeUI extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Poste");
 
-        viderBtn.setText("Vider");
-
         javax.swing.GroupLayout formEmployeLayout = new javax.swing.GroupLayout(formEmploye);
         formEmploye.setLayout(formEmployeLayout);
         formEmployeLayout.setHorizontalGroup(
             formEmployeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(formEmployeLayout.createSequentialGroup()
                 .addGap(57, 57, 57)
-                .addGroup(formEmployeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(viderBtn)
-                    .addGroup(formEmployeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(formEmployeLayout.createSequentialGroup()
-                            .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(46, 46, 46)
-                            .addComponent(posteTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(formEmployeLayout.createSequentialGroup()
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(departemantTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(formEmployeLayout.createSequentialGroup()
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(46, 46, 46)
-                            .addComponent(nomTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(formEmployeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(formEmployeLayout.createSequentialGroup()
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(posteTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(formEmployeLayout.createSequentialGroup()
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(departemantTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(formEmployeLayout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(nomTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(122, Short.MAX_VALUE))
         );
         formEmployeLayout.setVerticalGroup(
@@ -105,16 +181,36 @@ public class EmployeUI extends javax.swing.JInternalFrame {
                 .addGroup(formEmployeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(posteTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(viderBtn)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         ajouterBtn.setText("Ajouter");
+        ajouterBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajouterBtnActionPerformed(evt);
+            }
+        });
 
         ajouterBtn1.setText("Modifier");
+        ajouterBtn1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajouterBtn1ActionPerformed(evt);
+            }
+        });
 
         ajouterBtn2.setText("Supprimer");
+        ajouterBtn2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajouterBtn2ActionPerformed(evt);
+            }
+        });
+
+        viderBtn.setText("Vider");
+        viderBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viderBtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,7 +221,8 @@ public class EmployeUI extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(ajouterBtn2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(ajouterBtn1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ajouterBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ajouterBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(viderBtn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(46, 46, 46))
         );
         jPanel1Layout.setVerticalGroup(
@@ -137,7 +234,9 @@ public class EmployeUI extends javax.swing.JInternalFrame {
                 .addComponent(ajouterBtn1)
                 .addGap(18, 18, 18)
                 .addComponent(ajouterBtn2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(viderBtn)
+                .addContainerGap(42, Short.MAX_VALUE))
         );
 
         jTableEmploye.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,7 +280,7 @@ public class EmployeUI extends javax.swing.JInternalFrame {
                     .addComponent(formEmploye, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(111, Short.MAX_VALUE))
         );
 
         pack();
@@ -190,6 +289,102 @@ public class EmployeUI extends javax.swing.JInternalFrame {
     private void nomTxtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomTxtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_nomTxtActionPerformed
+
+    private void viderBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viderBtnActionPerformed
+        // TODO add your handling code here:
+        clearForm();
+    }//GEN-LAST:event_viderBtnActionPerformed
+
+    private void ajouterBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterBtnActionPerformed
+        // TODO add your handling code here:
+        Employe e = new Employe(nomTxt.getText(), departemantTxt.getText(), posteTxt.getText());
+        boolean isAdded = false;
+        isAdded = employeSrvice.create(e);
+        if (isAdded) {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Employe " + e.getNom() + " bien ajouter",
+                        "Success",
+                        JOptionPane.INFORMATION_MESSAGE
+            );
+            clearForm();
+            loadEmployes();
+        } else {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Erreur ajoute de " + e.getNom(),
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+    }//GEN-LAST:event_ajouterBtnActionPerformed
+
+    private void ajouterBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterBtn1ActionPerformed
+        // TODO add your handling code here:
+        if (currentEmplyeId > 0) {
+            Employe e = new Employe(currentEmplyeId, nomTxt.getText(), departemantTxt.getText(), posteTxt.getText());
+            boolean isUpdated = false;
+            isUpdated = employeSrvice.update(e);
+            if (isUpdated) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Employe " + e.getNom() + " bien modifier",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE
+                );
+                clearForm();
+                loadEmployes();
+            } else {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Erreur modification de " + e.getNom(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Erreur auccun employer a ete selectionner ",
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_ajouterBtn1ActionPerformed
+
+    private void ajouterBtn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajouterBtn2ActionPerformed
+        // TODO add your handling code here:
+        if (currentEmplyeId > 0) {
+            Employe e = new Employe(currentEmplyeId, nomTxt.getText(), departemantTxt.getText(), posteTxt.getText());
+            boolean isDeleted = false;
+            isDeleted = employeSrvice.delete(e);
+            if (isDeleted) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Employe " + e.getNom() + " bien supprimer",
+                            "Success",
+                            JOptionPane.INFORMATION_MESSAGE
+                );
+                clearForm();
+                loadEmployes();
+            } else {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Erreur supression de " + e.getNom(),
+                            "Erreur",
+                            JOptionPane.ERROR_MESSAGE
+                );
+            }
+        } else {
+            JOptionPane.showMessageDialog(
+                        this,
+                        "Erreur auccun employer a ete selectionner ",
+                        "Erreur",
+                        JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_ajouterBtn2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -225,6 +420,7 @@ public class EmployeUI extends javax.swing.JInternalFrame {
                 new EmployeUI().setVisible(true);
             }
         });
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

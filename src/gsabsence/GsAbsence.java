@@ -7,7 +7,7 @@ package gsabsence;
 
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class GsAbsence {
 

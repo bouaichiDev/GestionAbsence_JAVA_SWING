@@ -13,6 +13,7 @@ import java.util.Date;
  */
 public class Absence {
 
+    private int id;
     private Employe employe;
     private TypeAbsence typeAbsemce;
     private Date dateDebut;
@@ -25,6 +26,14 @@ public class Absence {
 
     public Absence(Employe em, TypeAbsence ta, Date debut, Date fin) {
 
+        this.employe = em;
+        this.typeAbsemce = ta;
+        this.dateDebut = debut;
+        this.dateFin = fin;
+    }
+
+    public Absence(int id, Employe em, TypeAbsence ta, Date debut, Date fin) {
+        this.id = id;
         this.employe = em;
         this.typeAbsemce = ta;
         this.dateDebut = debut;
@@ -71,6 +80,13 @@ public class Absence {
      */
     public void setDateFin(Date dateFin) {
         this.dateFin = dateFin;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
     }
 
 }

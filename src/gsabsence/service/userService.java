@@ -14,7 +14,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class userService {
 

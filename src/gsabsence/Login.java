@@ -8,42 +8,43 @@ package gsabsence;
 import gsabsence.connexion.Connexion;
 import gsabsence.entities.User;
 import gsabsence.service.userService;
+import gsabsence.util.UiUtils;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class Login extends javax.swing.JFrame {
 
     private userService user;
     private static Connection connection = null;
+
     /**
      * Creates new form Login
      */
     public Login() {
         initComponents();
+        UiUtils.setAppIcon(this);
         reconnectBtn.setVisible(false);
-        try
-        {
-        connection=Connexion.getConnection();
-        if(connection==null)
-        {
-            JOptionPane.showMessageDialog(
-                        this,
-                        "Please check connexion",
-                        "Connexion Error",
-                        JOptionPane.WARNING_MESSAGE
-            );
-            loginBtn.setVisible(false);
-            reconnectBtn.setVisible(true);
+        try {
+            connection = Connexion.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Please check connexion",
+                            "Connexion Error",
+                            JOptionPane.WARNING_MESSAGE
+                );
+                loginBtn.setVisible(false);
+                registreBtn.setVisible(false);
+                reconnectBtn.setVisible(true);
+            }
+            user = new userService();
+        } catch (Exception ex) {
         }
-        user = new userService();
-        }
-        catch(Exception ex)
-        {}
     }
 
     /**
@@ -60,11 +61,12 @@ public class Login extends javax.swing.JFrame {
         txt_login = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         txt_passe = new javax.swing.JTextField();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         reconnectBtn = new javax.swing.JButton();
+        registreBtn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestion Absence");
         setResizable(false);
 
         loginBtn.setText("Login");
@@ -76,25 +78,18 @@ public class Login extends javax.swing.JFrame {
 
         jLabel1.setText("Login");
 
+        txt_login.setText("admin");
         txt_login.setToolTipText("");
+        txt_login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_loginActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Password");
 
+        txt_passe.setText("admin123");
         txt_passe.setToolTipText("");
-
-        jLabel3.setText("Mos De Passe Oublie? ");
-        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel3MouseClicked(evt);
-            }
-        });
-
-        jLabel4.setText("registre");
-        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel4MouseClicked(evt);
-            }
-        });
 
         reconnectBtn.setText("Reconnect");
         reconnectBtn.addActionListener(new java.awt.event.ActionListener() {
@@ -103,37 +98,52 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
+        registreBtn.setText("Inscrire");
+        registreBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                registreBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/GsAbsence-logo.png"))); // NOI18N
+        jLabel3.setText("jLabel3");
+        jLabel3.setMaximumSize(new java.awt.Dimension(500, 500));
+        jLabel3.setMinimumSize(new java.awt.Dimension(500, 500));
+        jLabel3.setPreferredSize(new java.awt.Dimension(500, 500));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(39, 39, 39)
-                        .addComponent(txt_login))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(11, 11, 11)
-                        .addComponent(jLabel3)
-                        .addGap(41, 41, 41)
-                        .addComponent(jLabel4))
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_passe)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(loginBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                                .addComponent(reconnectBtn))
-                            .addComponent(txt_passe))))
-                .addGap(109, 109, 109))
+                                .addGap(18, 18, 18)
+                                .addComponent(registreBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(reconnectBtn)
+                                .addContainerGap())))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(39, 39, 39)
+                        .addComponent(txt_login))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txt_login, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -144,12 +154,9 @@ public class Login extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(loginBtn)
+                    .addComponent(registreBtn)
                     .addComponent(reconnectBtn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addGap(103, 103, 103))
+                .addGap(59, 59, 59))
         );
 
         pack();
@@ -169,12 +176,12 @@ public class Login extends javax.swing.JFrame {
             return;
         }
         User authUser;
-        authUser = user.auth(userName, passeword); 
+        authUser = user.auth(userName, passeword);
         if (authUser == null) {
-             
+
             JOptionPane.showMessageDialog(
                         this,
-                         "UserName ou mot de pass incorrect",
+                        "UserName ou mot de pass incorrect",
                         "Login Failed",
                         JOptionPane.ERROR_MESSAGE
             );
@@ -195,42 +202,38 @@ public class Login extends javax.swing.JFrame {
 
     private void reconnectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reconnectBtnActionPerformed
         // TODO add your handling code here:
-         
-        try
-        {
-        connection=Connexion.getConnection();
-        if(connection==null)
-        {
-            JOptionPane.showMessageDialog(
-                        this,
-                        "Please check connexion",
-                        "Connexion Error",
-                        JOptionPane.WARNING_MESSAGE
-            );
-            loginBtn.setVisible(false);
-            reconnectBtn.setVisible(true);
+
+        try {
+            connection = Connexion.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Please check connexion",
+                            "Connexion Error",
+                            JOptionPane.WARNING_MESSAGE
+                );
+                loginBtn.setVisible(false);
+                registreBtn.setVisible(false);
+                reconnectBtn.setVisible(true);
+            } else {
+                loginBtn.setVisible(true);
+                registreBtn.setVisible(true);
+                reconnectBtn.setVisible(false);
+            }
+            user = new userService();
+        } catch (Exception ex) {
         }
-        else
-        {
-            loginBtn.setVisible(true);
-            reconnectBtn.setVisible(false);
-        }
-        user = new userService();
-        }
-        catch(Exception ex)
-        {}
     }//GEN-LAST:event_reconnectBtnActionPerformed
 
-    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+    private void txt_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_loginActionPerformed
         // TODO add your handling code here:
-         // 4️⃣ Open Home / Dashboard
-            new Registre().setVisible(true);
-            this.dispose(); // close login form
-    }//GEN-LAST:event_jLabel3MouseClicked
+    }//GEN-LAST:event_txt_loginActionPerformed
 
-    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+    private void registreBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registreBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jLabel4MouseClicked
+        new Registre().setVisible(true);
+        this.dispose(); // close login form
+    }//GEN-LAST:event_registreBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -271,9 +274,9 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JButton loginBtn;
     private javax.swing.JButton reconnectBtn;
+    private javax.swing.JButton registreBtn;
     private javax.swing.JTextField txt_login;
     private javax.swing.JTextField txt_passe;
     // End of variables declaration//GEN-END:variables

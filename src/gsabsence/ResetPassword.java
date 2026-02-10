@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class ResetPassword extends javax.swing.JFrame {
 
@@ -24,24 +24,21 @@ public class ResetPassword extends javax.swing.JFrame {
      */
     public ResetPassword() {
         initComponents();
-        try
-        {
-        connection=Connexion.getConnection();
-        if(connection==null)
-        {
-            JOptionPane.showMessageDialog(
-                        this,
-                        "Please check connexion",
-                        "Connexion Error",
-                        JOptionPane.WARNING_MESSAGE
-            );
-            resetBtn.setVisible(false);
-            reconnectBtn.setVisible(true);
+        try {
+            connection = Connexion.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Please check connexion",
+                            "Connexion Error",
+                            JOptionPane.WARNING_MESSAGE
+                );
+                resetBtn.setVisible(false);
+                reconnectBtn.setVisible(true);
+            }
+            user = new userService();
+        } catch (Exception ex) {
         }
-        user = new userService();
-        }
-        catch(Exception ex)
-        {}
     }
 
     /**
@@ -106,8 +103,8 @@ public class ResetPassword extends javax.swing.JFrame {
 
     private void resetBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetBtnActionPerformed
         // TODO add your handling code here:
-        String email= emailTxt.getText();
-        if ( email.isEmpty()  ) {
+        String email = emailTxt.getText();
+        if (email.isEmpty()) {
             JOptionPane.showMessageDialog(
                         this,
                         "Please enter email  ",
@@ -116,17 +113,16 @@ public class ResetPassword extends javax.swing.JFrame {
             );
             return;
         }
-        boolean isExist=false;
-        isExist=user.emailExists(email);
-        if(!isExist)
-        {
-             JOptionPane.showMessageDialog(
+        boolean isExist = false;
+        isExist = user.emailExists(email);
+        if (!isExist) {
+            JOptionPane.showMessageDialog(
                         this,
                         "Erreur email introuvable",
                         "Erreur address mail",
                         JOptionPane.WARNING_MESSAGE
             );
-             return ;
+            return;
         }
     }//GEN-LAST:event_resetBtnActionPerformed
 

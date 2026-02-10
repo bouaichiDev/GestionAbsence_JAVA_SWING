@@ -8,39 +8,41 @@ package gsabsence;
 import gsabsence.connexion.Connexion;
 import gsabsence.entities.User;
 import gsabsence.service.userService;
+import gsabsence.util.UiUtils;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 
 /**
  *
- * @author badz_
+ * @author badrBouaichi
  */
 public class Registre extends javax.swing.JFrame {
+
     private userService user;
     private static Connection connection = null;
+
     /**
      * Creates new form Registre
      */
     public Registre() {
         initComponents();
-        try
-        {
-        connection=Connexion.getConnection();
-        if(connection==null)
-        {
-            JOptionPane.showMessageDialog(
-                        this,
-                        "Please check connexion",
-                        "Connexion Error",
-                        JOptionPane.WARNING_MESSAGE
-            );
-            inscrireBtn.setVisible(false);
-            reconnectBtn.setVisible(true);
+        UiUtils.setAppIcon(this);
+        reconnectBtn.setVisible(false);
+        try {
+            connection = Connexion.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Please check connexion",
+                            "Connexion Error",
+                            JOptionPane.WARNING_MESSAGE
+                );
+                inscrireBtn.setVisible(false);
+                reconnectBtn.setVisible(true);
+            }
+            user = new userService();
+        } catch (Exception ex) {
         }
-        user = new userService();
-        }
-        catch(Exception ex)
-        {}
     }
 
     /**
@@ -64,6 +66,7 @@ public class Registre extends javax.swing.JFrame {
         reconnectBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Inscrire");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setResizable(false);
 
@@ -93,34 +96,29 @@ public class Registre extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(69, 69, 69)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(inscrireBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(reconnectBtn))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel1)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(emailTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(userNameTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(inscrireBtn, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(reconnectBtn))
-                                    .addComponent(cmdpTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(mdpTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(86, 117, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(emailTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(userNameTxt, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(cmdpTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(mdpTxt, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addGap(70, 70, 70))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,11 +139,11 @@ public class Registre extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cmdpTxt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(inscrireBtn)
                     .addComponent(reconnectBtn))
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         pack();
@@ -155,9 +153,9 @@ public class Registre extends javax.swing.JFrame {
         // TODO add your handling code here:
         // TODO add your handling code here:
         String userName = userNameTxt.getText();
-        String email= emailTxt.getText();
+        String email = emailTxt.getText();
         String passeword = mdpTxt.getText();
-        String confirmPasseword=cmdpTxt.getText();
+        String confirmPasseword = cmdpTxt.getText();
         if (userName.isEmpty() || passeword.isEmpty() || email.isEmpty() || confirmPasseword.isEmpty()) {
             JOptionPane.showMessageDialog(
                         this,
@@ -167,44 +165,41 @@ public class Registre extends javax.swing.JFrame {
             );
             return;
         }
-        if (!passeword.equals(confirmPasseword))
-        {
+        if (!passeword.equals(confirmPasseword)) {
             JOptionPane.showMessageDialog(
                         this,
                         "Please password and confirme passeword et different",
                         "Validation Error",
                         JOptionPane.WARNING_MESSAGE
             );
-            System.out.println("✅ passeword :"+ passeword);
-            System.out.println("✅ confirmPasseword :"+ confirmPasseword);
+            System.out.println("✅ passeword :" + passeword);
+            System.out.println("✅ confirmPasseword :" + confirmPasseword);
             return;
         }
-        boolean isRegistre=false;boolean isExist=false;
-        isRegistre = user.register(userName,email, passeword);
-        isExist=user.emailExists(email);
-        if(isExist)
-        {
-             JOptionPane.showMessageDialog(
+        boolean isRegistre = false;
+        boolean isExist = false;
+
+        isExist = user.emailExists(email);
+        if (isExist) {
+            JOptionPane.showMessageDialog(
                         this,
                         "Erreur email deja exit",
                         "Erreur address mail",
                         JOptionPane.WARNING_MESSAGE
             );
-             return ;
+            return;
         }
-        if(isRegistre)
-        {
+        isRegistre = user.register(userName, email, passeword);
+        if (isRegistre) {
             JOptionPane.showMessageDialog(
                         this,
                         "Utilusateur bien cree",
                         "Creation utilusateur",
                         JOptionPane.INFORMATION_MESSAGE
             );
-           new Login().setVisible(isRegistre);
-           this.dispose();
-        }
-        else
-        {
+            new Login().setVisible(isRegistre);
+            this.dispose();
+        } else {
             JOptionPane.showMessageDialog(
                         this,
                         "Erreur leur de creation compte essayer apres quelque minutes svp",
@@ -212,34 +207,29 @@ public class Registre extends javax.swing.JFrame {
                         JOptionPane.WARNING_MESSAGE
             );
         }
-        
+
     }//GEN-LAST:event_inscrireBtnActionPerformed
 
     private void reconnectBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reconnectBtnActionPerformed
         // TODO add your handling code here:
-        try
-        {
-        connection=Connexion.getConnection();
-        if(connection==null)
-        {
-            JOptionPane.showMessageDialog(
-                        this,
-                        "Please check connexion",
-                        "Connexion Error",
-                        JOptionPane.WARNING_MESSAGE
-            );
-            inscrireBtn.setVisible(false);
-            reconnectBtn.setVisible(true);
+        try {
+            connection = Connexion.getConnection();
+            if (connection == null) {
+                JOptionPane.showMessageDialog(
+                            this,
+                            "Please check connexion",
+                            "Connexion Error",
+                            JOptionPane.WARNING_MESSAGE
+                );
+                inscrireBtn.setVisible(false);
+                reconnectBtn.setVisible(true);
+            } else {
+                inscrireBtn.setVisible(true);
+                reconnectBtn.setVisible(false);
+            }
+            user = new userService();
+        } catch (Exception ex) {
         }
-        else
-        {
-            inscrireBtn.setVisible(true);
-            reconnectBtn.setVisible(false);
-        }
-        user = new userService();
-        }
-        catch(Exception ex)
-        {}
     }//GEN-LAST:event_reconnectBtnActionPerformed
 
     /**

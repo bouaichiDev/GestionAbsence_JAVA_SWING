@@ -30,7 +30,7 @@ public class TypeAbsence {
     @Override
     public String toString()
     {
-        return "TypeAbsence [id=" + getId() + "]";
+        return   getLibelle()  ;
     }
     /**
      * @return the id
@@ -67,6 +67,22 @@ public class TypeAbsence {
         this.justification = justification;
     }
     
-    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+
+        TypeAbsence absence = (TypeAbsence) obj;
+        return this.id == absence.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Integer.hashCode(id);
+    }
 
 }
